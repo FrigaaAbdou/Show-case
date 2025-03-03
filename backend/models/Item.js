@@ -6,7 +6,18 @@ const ItemSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  description: String,
+  description: {
+    type: String,
+    required: true,
+  },
+  price: {
+    type: Number,
+    required: true,
+  },
+  imgLink: {
+    type: String,
+    default: ''
+  }
 }, { timestamps: true });
 
 module.exports = mongoose.model('Item', ItemSchema);

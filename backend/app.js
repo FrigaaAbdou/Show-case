@@ -1,4 +1,3 @@
-// app.js
 require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
@@ -19,8 +18,8 @@ mongoose.connect(process.env.MONGO_URI, {
   .catch(err => console.error('MongoDB connection error:', err));
 
 // Import and use the items router
-const itemsRouter = require('./routes/items');
-app.use('/api/items', itemsRouter);
+const itemsRouter = require('./routes/item'); // Ensure the path and file name are correct
+app.use('/api/item', itemsRouter);
 
 // Basic route
 app.get('/', (req, res) => {
