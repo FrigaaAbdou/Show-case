@@ -17,11 +17,14 @@ mongoose.connect(process.env.MONGO_URI, {
   .then(() => console.log('MongoDB connected'))
   .catch(err => console.error('MongoDB connection error:', err));
 
-// Import and use the items router
-const itemsRouter = require('./routes/item'); // Ensure the path and file name are correct
+// Import and use the auth router (with user management)
+const authRouter = require('./routes/auth');
+app.use('/api/auth', authRouter);
+
+// If you have item routes, you can still keep them:
+const itemsRouter = require('./routes/item');
 app.use('/api/item', itemsRouter);
 
-// Basic route
 app.get('/', (req, res) => {
   res.send('API is running');
 });
