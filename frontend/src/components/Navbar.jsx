@@ -6,11 +6,18 @@ import { ChevronRight, User, Settings, LogOut } from "lucide-react";
 function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [loggedIn, setLoggedIn] = useState(false);
   const dropdownRef = useRef(null);
 
   const toggleDropdown = () => {
     setIsDropdownOpen((prev) => !prev);
   };
+
+  // Check for a token (or user info) in localStorage on mount
+  useEffect(() => {
+    const token = localStorage.getItem("jwtToken");
+    setLoggedIn(!!token);
+  }, []);
 
   useEffect(() => {
     function handleClickOutside(event) {
@@ -43,6 +50,15 @@ function Navbar() {
     document.body.classList.toggle("overflow-hidden", isOpen);
   }, [isOpen]);
 
+  // Handle logout: clear token and reload
+  const handleLogout = () => {
+    localStorage.removeItem("jwtToken");
+    localStorage.removeItem("user");
+    setLoggedIn(false);
+    // Optionally, redirect to home page
+    window.location.href = "/";
+  };
+
   return (
     <nav className="sticky top-0 z-50 bg-blue-50/80 shadow-sm text-blue-900">
       <div className="container mx-auto flex justify-between items-center py-4 px-6">
@@ -72,44 +88,73 @@ function Navbar() {
             </NavLink>
           ))}
 
-          <div className="relative ml-6" ref={dropdownRef}>
-            <div className="group relative">
-              <button
-                onClick={toggleDropdown}
-                className="w-10 h-10 flex items-center justify-center bg-blue-100 text-blue-700 rounded-full border border-blue-200 hover:border-blue-400 transition"
+          {!loggedIn && (
+            <>
+              <NavLink
+                to="/signin"
+                className="px-4 py-2 text-sm rounded-md hover:bg-blue-100 text-blue-700 transition"
               >
-                <User className="w-6 h-6" />
-              </button>
-              <div className="absolute left-full ml-3 top-1/2 -translate-y-1/2 text-xs text-white bg-blue-700 px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition whitespace-nowrap shadow-md">
-                Profile
-              </div>
-            </div>
+                Sign In
+              </NavLink>
+              <NavLink
+                to="/login"
+                className="px-4 py-2 text-sm rounded-md bg-blue-600 text-white hover:bg-blue-700 transition"
+              >
+                Login
+              </NavLink>
+            </>
+          )}
 
-            <AnimatePresence>
-              {isDropdownOpen && (
-                <motion.div
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -10 }}
-                  transition={{ duration: 0.2 }}
-                  className="absolute right-0 mt-2 w-48 bg-white border border-blue-100 rounded-lg shadow-md py-2"
+          {loggedIn && (
+            <div className="relative ml-6" ref={dropdownRef}>
+              <div className="group relative">
+                <button
+                  onClick={toggleDropdown}
+                  className="w-10 h-10 flex items-center justify-center bg-blue-100 text-blue-700 rounded-full border border-blue-200 hover:border-blue-400 transition"
                 >
-                  <button className="flex items-center w-full px-4 py-2 text-blue-700 hover:bg-blue-50 transition">
-                    <User className="w-5 h-5 mr-3" />
-                    Profile
-                  </button>
-                  <button className="flex items-center w-full px-4 py-2 text-blue-700 hover:bg-blue-50 transition">
-                    <Settings className="w-5 h-5 mr-3" />
-                    Settings
-                  </button>
-                  <button className="flex items-center w-full px-4 py-2 text-red-600 hover:bg-red-50 transition">
-                    <LogOut className="w-5 h-5 mr-3" />
-                    Logout
-                  </button>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
+                  <User className="w-6 h-6" />
+                </button>
+                <div className="absolute left-full ml-3 top-1/2 -translate-y-1/2 text-xs text-white bg-blue-700 px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition whitespace-nowrap shadow-md">
+                  Profile
+                </div>
+              </div>
+
+              <AnimatePresence>
+                {isDropdownOpen && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    transition={{ duration: 0.2 }}
+                    className="absolute right-0 mt-2 w-48 bg-white border border-blue-100 rounded-lg shadow-md py-2"
+                  >
+                    <NavLink
+                      to="/profile"
+                    >
+                      <button className="flex items-center w-full px-4 py-2 text-blue-700 hover:bg-blue-50 transition">
+                        <User className="w-5 h-5 mr-3" />
+                        Profile
+                      </button>
+                    </NavLink> 
+                    
+                      <button className="flex items-center w-full px-4 py-2 text-blue-700 hover:bg-blue-50 transition">
+                      <Settings className="w-5 h-5 mr-3" />
+                      Settings
+                    </button>
+                     
+                    
+                    <button
+                      onClick={handleLogout}
+                      className="flex items-center w-full px-4 py-2 text-red-600 hover:bg-red-50 transition"
+                    >
+                      <LogOut className="w-5 h-5 mr-3" />
+                      Logout
+                    </button>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+          )}
         </div>
 
         <button
@@ -164,28 +209,56 @@ function Navbar() {
                 className="self-end text-blue-700 hover:text-blue-900"
                 aria-label="Close menu"
               >
-                ✕
+                {/* You can add an icon here */}
               </button>
 
-              <motion.div
-                whileHover={{ y: -2, scale: 1.02 }}
-                className="flex items-center gap-2 p-3 bg-blue-50 rounded-2xl shadow-md"
-              >
-                <div className="w-12 h-12 flex items-center justify-center bg-blue-100 text-blue-700 rounded-full border border-blue-200">
-                  <User className="w-6 h-6" />
-                </div>
-                <div className="flex flex-col">
-                  <p className="font-medium text-blue-800 text-sm">
-                    Mindful User
-                  </p>
-                  <button className="mt-1 flex items-center gap-1 text-xs text-blue-600 px-2 py-1 rounded-md hover:bg-blue-100 transition">
-                    View Profile
-                    <ChevronRight className="w-4 h-4" />
-                  </button>
-                </div>
-              </motion.div>
+              {loggedIn && (
+                <motion.div
+                  whileHover={{ y: -2, scale: 1.02 }}
+                  className="flex items-center gap-2 p-3 bg-blue-50 rounded-2xl shadow-md"
+                >
+                  <div className="w-12 h-12 flex items-center justify-center bg-blue-100 text-blue-700 rounded-full border border-blue-200">
+                    <User className="w-6 h-6" />
+                  </div>
+                  <div className="flex flex-col">
+                    <p className="font-medium text-blue-800 text-sm">
+                      Mindful User
+                    </p>
+                    <NavLink
+                      to="/profile"
+                    >
+                    <button className="mt-1 flex items-center gap-1 text-xs text-blue-600 px-2 py-1 rounded-md hover:bg-blue-100 transition">
+                      View Profile
+                      <ChevronRight className="w-4 h-4" />
+                    </button>
+                    </NavLink>
+                  </div>
+                </motion.div>
+              )}
 
               {/* Separator */}
+              <div className="border-t border-blue-100 my-2" />
+
+              {/* Auth buttons (only visible if not logged in) */}
+              {!loggedIn && (
+                <>
+                  <NavLink
+                    to="/login"
+                    onClick={() => setIsOpen(false)}
+                    className="w-full text-left py-2 px-4 rounded-md text-blue-700 hover:bg-blue-50 transition"
+                  >
+                    LogIn
+                  </NavLink>
+                  <NavLink
+                    to="/signup"
+                    onClick={() => setIsOpen(false)}
+                    className="w-full text-left py-2 px-4 rounded-md bg-blue-600 text-white hover:bg-blue-700 transition"
+                  >
+                    Sign Up
+                  </NavLink>
+                </>
+              )}
+
               <div className="border-t border-blue-100" />
               <div className="flex flex-col gap-4">
                 {[
@@ -207,9 +280,18 @@ function Navbar() {
                     }
                   >
                     {name}
+                    
                   </NavLink>
+                  
                 ))}
               </div>
+               <button
+                      onClick={handleLogout}
+                      className="flex items-center w-full px-4 py-2 text-red-600 hover:bg-red-50 transition"
+                    >
+                      <LogOut className="w-5 h-5 mr-3" />
+                      Logout
+                    </button>
             </motion.div>
           </>
         )}
