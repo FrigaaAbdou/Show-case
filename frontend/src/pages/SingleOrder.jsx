@@ -67,7 +67,7 @@ function SingleOrder() {
         transition={{ duration: 0.4 }}
         className="w-full max-w-3xl bg-blue-50 p-8 rounded-2xl shadow-md space-y-6"
       >
-        <h1 className="text-3xl font-bold text-blue-800 text-center">
+        <h1 className="text-2xl sm:text-3xl font-bold text-blue-800 text-center max-w-full truncate">
           Order #{order._id}
         </h1>
 
