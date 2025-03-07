@@ -250,11 +250,11 @@ function Navbar() {
                     LogIn
                   </NavLink>
                   <NavLink
-                    to="/signup"
+                    to="/signin"
                     onClick={() => setIsOpen(false)}
                     className="w-full text-left py-2 px-4 rounded-md bg-blue-600 text-white hover:bg-blue-700 transition"
                   >
-                    Sign Up
+                    Sign Ip
                   </NavLink>
                 </>
               )}
