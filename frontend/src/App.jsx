@@ -6,10 +6,13 @@ import Home from './pages/Home';
 import About from './pages/About';
 import Contact from './pages/Contact';
 import Product from './pages/Product';
-import { usePageLoader } from './hooks/usePageLoader';
 import Login from './pages/Login';
 import SignUp from './pages/Signin';
 import Profile from './pages/Profile';
+import SingleProduct from './pages/SingleProduct';
+import Orders from './pages/Orders';
+import SingleOrder from './pages/SingleOrder';
+import { usePageLoader } from './hooks/usePageLoader';
 import { Navigate } from 'react-router-dom';
 
 // ProtectedRoute: Only accessible if logged in.
@@ -37,7 +40,14 @@ function App() {
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/products" element={<Product />} />
-          
+          <Route path="/product/:id" element={<SingleProduct />} />
+          <Route path="/orders" element={<Orders />} />
+          <Route path="/order/:id" element={
+            <ProtectedRoute>
+              <SingleOrder />
+            </ProtectedRoute>
+          } />
+
           {/* Public Routes: redirect if already logged in */}
           <Route path="/login" element={
             <PublicRoute>
@@ -49,7 +59,7 @@ function App() {
               <SignUp />
             </PublicRoute>
           } />
-          
+
           {/* Protected Routes: require login */}
           <Route path="/profile" element={
             <ProtectedRoute>

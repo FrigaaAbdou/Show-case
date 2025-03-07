@@ -1,35 +1,89 @@
 import { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import AlertDialog from "../components/AlertDialog";
 
 function Product() {
   const [products, setProducts] = useState([]);
   const [error, setError] = useState(null);
+  const [alertData, setAlertData] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetch('http://localhost:3000/api/item')
       .then((res) => res.json())
       .then((data) => {
-        // Check if the response contains the items array
         if (data.items && Array.isArray(data.items)) {
           setProducts(data.items);
         } else if (Array.isArray(data)) {
-          // Fallback in case the API returns an array directly
           setProducts(data);
         } else {
           setError('Unexpected data format');
         }
       })
-      .catch((error) => {
-        console.error('Error fetching products:', error);
+      .catch(() => {
         setError('Error fetching products');
       });
   }, []);
 
-  if (error) {
-    return <div>{error}</div>;
-  }
+  const handleOrderNow = async (product) => {
+    const token = localStorage.getItem('jwtToken');
+    if (!token) {
+      navigate('/login');
+      return;
+    }
+
+    const orderData = {
+      products: [
+        {
+          product: product._id,
+          quantity: 1,
+        },
+      ],
+      totalPrice: product.price,
+    };
+
+    try {
+      const response = await fetch('http://localhost:3000/api/orders', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(orderData),
+      });
+      const data = await response.json();
+
+      if (!response.ok) {
+        setAlertData({
+          message: data.message || "Failed to place order",
+          onConfirm: () => setAlertData(null),
+        });
+      } else {
+        setAlertData({
+          message: "Order placed successfully",
+          subMessage: "Thank you for your order! We're preparing your product with care and will keep you updated on its journey.",
+          onConfirm: () => setAlertData(null),
+        });
+      }
+    } catch {
+      setAlertData({
+        message: 'Error placing order',
+        subMessage: '',
+        onConfirm: () => setAlertData(null),
+      });
+    }
+  };
 
   return (
     <section className="container mx-auto px-6 py-16">
+      {alertData && (
+        <AlertDialog
+          message={alertData.message}
+          subMessage={alertData.subMessage}
+          onConfirm={alertData.onConfirm}
+          onClose={() => setAlertData(null)}
+        />
+      )}
       <h1 className="text-4xl font-bold text-center text-blue-800 mb-12">
         Explore Our Mindful Products
       </h1>
@@ -46,13 +100,28 @@ function Product() {
               className="w-full h-48 object-cover"
             />
             <div className="p-6 space-y-4">
-              <h2 className="text-2xl font-semibold text-blue-700">{product.name}</h2>
+              <h2 className="text-2xl font-semibold text-blue-700">
+                {product.name}
+              </h2>
               <p className="text-blue-600">{product.description}</p>
-              <div className="flex justify-between items-center">
-                <span className="text-xl font-bold text-blue-800">
-                  ${product.price}
-                </span>
-                <button className="px-4 py-2 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition">
+              <span className="text-xl font-bold text-blue-800 block">
+                ${product.price}
+              </span>
+
+              <div className="flex flex-col gap-3 mt-4">
+                <button
+                  onClick={() => handleOrderNow(product)}
+                  className="w-full px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition"
+                >
+                  Order Now
+                </button>
+                <Link
+                  to={`/product/${product._id}`}
+                  className="w-full text-center px-4 py-2 text-blue-700 border border-blue-700 rounded-md hover:bg-blue-50 transition"
+                >
+                  See More
+                </Link>
+                <button className="w-full px-4 py-2 bg-blue-100 text-blue-700 rounded-md hover:bg-blue-200 transition">
                   Add to Cart
                 </button>
               </div>

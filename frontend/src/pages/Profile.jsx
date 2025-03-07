@@ -8,7 +8,6 @@ function Profile() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
-  // Load user data from localStorage when the component mounts
   useEffect(() => {
     const userData = localStorage.getItem("user");
     if (userData) {
@@ -22,7 +21,6 @@ function Profile() {
     }
   }, []);
 
-  // Handle profile update submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
@@ -51,7 +49,6 @@ function Profile() {
         setError(data.message || "Failed to update profile");
       } else {
         setSuccess("Profile updated successfully.");
-        // Update localStorage with new user data
         localStorage.setItem("user", JSON.stringify(data));
       }
     } catch (err) {
@@ -106,6 +103,14 @@ function Profile() {
             Save Changes
           </button>
         </form>
+
+        {/* See My Orders Button */}
+        <button
+          onClick={() => navigate("/orders")}
+          className="w-full py-3 bg-blue-100 text-blue-700 rounded-md hover:bg-blue-200 transition"
+        >
+          See My Orders
+        </button>
       </div>
     </section>
   );

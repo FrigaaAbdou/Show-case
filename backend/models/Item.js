@@ -1,7 +1,7 @@
 // models/Item.js
 const mongoose = require('mongoose');
 
-const MAX_WORDS = 500;
+const MAX_WORDS = 100;
 
 const ItemSchema = new mongoose.Schema({
   name: {
