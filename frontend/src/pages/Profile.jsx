@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 function Profile() {
   const navigate = useNavigate();
   const [name, setName] = useState("Mindful User");
@@ -36,7 +38,7 @@ function Profile() {
     const token = localStorage.getItem("jwtToken");
 
     try {
-      const response = await fetch(`http://localhost:3000/api/auth/${userId}`, {
+      const response = await fetch(`${API_URL}/auth/${userId}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

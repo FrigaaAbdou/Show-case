@@ -128,21 +128,18 @@ function Navbar() {
                     transition={{ duration: 0.2 }}
                     className="absolute right-0 mt-2 w-48 bg-white border border-blue-100 rounded-lg shadow-md py-2"
                   >
-                    <NavLink
-                      to="/profile"
-                    >
+                    <NavLink to="/profile">
                       <button className="flex items-center w-full px-4 py-2 text-blue-700 hover:bg-blue-50 transition">
                         <User className="w-5 h-5 mr-3" />
                         Profile
                       </button>
-                    </NavLink> 
-                    
-                      <button className="flex items-center w-full px-4 py-2 text-blue-700 hover:bg-blue-50 transition">
+                    </NavLink>
+
+                    <button className="flex items-center w-full px-4 py-2 text-blue-700 hover:bg-blue-50 transition">
                       <Settings className="w-5 h-5 mr-3" />
                       Settings
                     </button>
-                     
-                    
+
                     <button
                       onClick={handleLogout}
                       className="flex items-center w-full px-4 py-2 text-red-600 hover:bg-red-50 transition"
@@ -224,13 +221,11 @@ function Navbar() {
                     <p className="font-medium text-blue-800 text-sm">
                       Mindful User
                     </p>
-                    <NavLink
-                      to="/profile"
-                    >
-                    <button className="mt-1 flex items-center gap-1 text-xs text-blue-600 px-2 py-1 rounded-md hover:bg-blue-100 transition">
-                      View Profile
-                      <ChevronRight className="w-4 h-4" />
-                    </button>
+                    <NavLink to="/profile">
+                      <button className="mt-1 flex items-center gap-1 text-xs text-blue-600 px-2 py-1 rounded-md hover:bg-blue-100 transition">
+                        View Profile
+                        <ChevronRight className="w-4 h-4" />
+                      </button>
                     </NavLink>
                   </div>
                 </motion.div>
@@ -280,18 +275,18 @@ function Navbar() {
                     }
                   >
                     {name}
-                    
                   </NavLink>
-                  
                 ))}
               </div>
-               <button
-                      onClick={handleLogout}
-                      className="flex items-center w-full px-4 py-2 text-red-600 hover:bg-red-50 transition"
-                    >
-                      <LogOut className="w-5 h-5 mr-3" />
-                      Logout
-                    </button>
+              {loggedIn && (
+                <button
+                  onClick={handleLogout}
+                  className="flex items-center w-full px-4 py-2 text-red-600 hover:bg-red-50 transition"
+                >
+                  <LogOut className="w-5 h-5 mr-3" />
+                  Logout
+                </button>
+              )}
             </motion.div>
           </>
         )}

@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import AlertDialog from "../components/AlertDialog";
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 function SingleProduct() {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -11,7 +13,7 @@ function SingleProduct() {
   const [quantity, setQuantity] = useState(1);
 
   useEffect(() => {
-    fetch(`http://localhost:3000/api/item/${id}`)
+    fetch(`${API_URL}/item/${id}`)
       .then((res) => res.json())
       .then((data) => setProduct(data))
       .catch(() => setError("Error fetching product."));
@@ -43,7 +45,7 @@ function SingleProduct() {
     };
 
     try {
-      const response = await fetch("http://localhost:3000/api/orders", {
+      const response = await fetch(`${API_URL}/orders`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

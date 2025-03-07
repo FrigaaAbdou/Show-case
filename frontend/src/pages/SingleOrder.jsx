@@ -3,6 +3,8 @@ import { useParams, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import AlertDialog from "../components/AlertDialog";
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 function SingleOrder() {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -16,7 +18,7 @@ function SingleOrder() {
       navigate("/login");
       return;
     }
-    fetch(`http://localhost:3000/api/orders/${id}`, {
+    fetch(`${API_URL}/orders/${id}`, {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => {
@@ -37,7 +39,7 @@ function SingleOrder() {
       return;
     }
     try {
-      const response = await fetch(`http://localhost:3000/api/orders/${order._id}`, {
+      const response = await fetch(`${API_URL}/orders/${order._id}`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` },
       });

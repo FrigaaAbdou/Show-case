@@ -3,6 +3,8 @@ import { Trash2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import AlertDialog from "../components/AlertDialog";
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 function Orders() {
   const [orders, setOrders] = useState([]);
   const [selectedOrder, setSelectedOrder] = useState(null);
@@ -16,7 +18,7 @@ function Orders() {
       navigate("/login");
       return;
     }
-    fetch("http://localhost:3000/api/orders", {
+    fetch(`${API_URL}/orders`, {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => res.json())
@@ -39,7 +41,7 @@ function Orders() {
     }
     try {
       // Use order._id based on your API's response
-      const response = await fetch(`http://localhost:3000/api/orders/${selectedOrder._id}`, {
+      const response = await fetch(`${API_URL}/orders/${selectedOrder._id}`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` },
       });

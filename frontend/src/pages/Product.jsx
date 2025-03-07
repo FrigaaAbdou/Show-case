@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import AlertDialog from "../components/AlertDialog";
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 function Product() {
   const [products, setProducts] = useState([]);
   const [error, setError] = useState(null);
@@ -9,7 +11,7 @@ function Product() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch('http://localhost:3000/api/item')
+    fetch(`${API_URL}/item`)
       .then((res) => res.json())
       .then((data) => {
         if (data.items && Array.isArray(data.items)) {
@@ -43,7 +45,7 @@ function Product() {
     };
 
     try {
-      const response = await fetch('http://localhost:3000/api/orders', {
+      const response = await fetch(`${API_URL}/orders`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
