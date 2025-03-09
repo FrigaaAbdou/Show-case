@@ -79,7 +79,7 @@ function Login() {
             type="submit"
             className="w-full py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition"
           >
-            Sign In
+            Login
           </button>
         </form>
   
