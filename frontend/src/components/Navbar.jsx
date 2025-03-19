@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronRight, User, Settings, LogOut } from "lucide-react";
+import logo from "../assets/images/logo.png";
 
 function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -60,17 +61,22 @@ function Navbar() {
   };
 
   return (
-    <nav className="sticky top-0 z-50 bg-blue-50/80 shadow-sm text-blue-900">
+    <nav className="sticky top-0 z-50 bg-slate-100/80 shadow-sm text-slate-900">
       <div className="container mx-auto flex justify-between items-center py-4 px-6">
-        <Link to="/" className="text-2xl font-bold tracking-wide">
-          MindfulApp
+        <Link to="/" className="flex items-center ">
+        <img 
+  src={logo} 
+  alt="CESI Logo" 
+  className="h-16 w-auto block object-contain"
+/>
         </Link>
+        {/* Rest of the navbar */}
 
         <div className="hidden md:flex gap-6 items-center">
           {[
             { name: "Home", to: "/" },
             { name: "About", to: "/about" },
-            { name: "Products", to: "/products" },
+            { name: "Formation", to: "/products" },
             { name: "Contact", to: "/contact" },
           ].map(({ name, to }) => (
             <NavLink
@@ -79,8 +85,8 @@ function Navbar() {
               className={({ isActive }) =>
                 `px-4 py-2 rounded-md transition ${
                   isActive
-                    ? "bg-blue-100 text-blue-700 font-semibold"
-                    : "hover:bg-blue-200"
+                    ? "bg-yellow-100 text-blue-900 font-semibold"
+                    : "hover:bg-yellow-200"
                 }`
               }
             >
@@ -92,13 +98,13 @@ function Navbar() {
             <>
               <NavLink
                 to="/signin"
-                className="px-4 py-2 text-sm rounded-md hover:bg-blue-100 text-blue-700 transition"
+                className="px-4 py-2 text-sm rounded-md hover:bg-yellow-100 text-yellow-700 transition"
               >
                 Sign In
               </NavLink>
               <NavLink
                 to="/login"
-                className="px-4 py-2 text-sm rounded-md bg-blue-600 text-white hover:bg-blue-700 transition"
+                className="px-4 py-2 text-sm rounded-md bg-yellow-600 text-white hover:bg-yellow-700 transition"
               >
                 Login
               </NavLink>
@@ -110,11 +116,11 @@ function Navbar() {
               <div className="group relative">
                 <button
                   onClick={toggleDropdown}
-                  className="w-10 h-10 flex items-center justify-center bg-blue-100 text-blue-700 rounded-full border border-blue-200 hover:border-blue-400 transition"
+                  className="w-10 h-10 flex items-center justify-center bg-yellow-100 text-yellow-700 rounded-full border border-yellow-200 hover:border-yellow-400 transition"
                 >
                   <User className="w-6 h-6" />
                 </button>
-                <div className="absolute left-full ml-3 top-1/2 -translate-y-1/2 text-xs text-white bg-blue-700 px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition whitespace-nowrap shadow-md">
+                <div className="absolute left-full ml-3 top-1/2 -translate-y-1/2 text-xs text-white bg-yellow-700 px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition whitespace-nowrap shadow-md">
                   Profile
                 </div>
               </div>
@@ -126,16 +132,16 @@ function Navbar() {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -10 }}
                     transition={{ duration: 0.2 }}
-                    className="absolute right-0 mt-2 w-48 bg-white border border-blue-100 rounded-lg shadow-md py-2"
+                    className="absolute right-0 mt-2 w-48 bg-white border border-yellow-100 rounded-lg shadow-md py-2"
                   >
                     <NavLink to="/profile">
-                      <button className="flex items-center w-full px-4 py-2 text-blue-700 hover:bg-blue-50 transition">
+                      <button className="flex items-center w-full px-4 py-2 text-yellow-700 hover:bg-yellow-50 transition">
                         <User className="w-5 h-5 mr-3" />
                         Profile
                       </button>
                     </NavLink>
 
-                    <button className="flex items-center w-full px-4 py-2 text-blue-700 hover:bg-blue-50 transition">
+                    <button className="flex items-center w-full px-4 py-2 text-blyellowue-700 hover:bg-yellow-50 transition">
                       <Settings className="w-5 h-5 mr-3" />
                       Settings
                     </button>
@@ -203,7 +209,7 @@ function Navbar() {
             >
               <button
                 onClick={() => setIsOpen(false)}
-                className="self-end text-blue-700 hover:text-blue-900"
+                className="self-end text-yellow-700 hover:text-yellow-900"
                 aria-label="Close menu"
               >
                 {/* You can add an icon here */}
@@ -212,17 +218,17 @@ function Navbar() {
               {loggedIn && (
                 <motion.div
                   whileHover={{ y: -2, scale: 1.02 }}
-                  className="flex items-center gap-2 p-3 bg-blue-50 rounded-2xl shadow-md"
+                  className="flex items-center gap-2 p-3 bg-yellow-50 rounded-2xl shadow-md"
                 >
-                  <div className="w-12 h-12 flex items-center justify-center bg-blue-100 text-blue-700 rounded-full border border-blue-200">
+                  <div className="w-12 h-12 flex items-center justify-center bg-yellow-100 text-yellow-700 rounded-full border border-yellow-200">
                     <User className="w-6 h-6" />
                   </div>
                   <div className="flex flex-col">
-                    <p className="font-medium text-blue-800 text-sm">
-                      Mindful User
+                    <p className="font-medium text-yellow-800 text-sm">
+                      User
                     </p>
                     <NavLink to="/profile">
-                      <button className="mt-1 flex items-center gap-1 text-xs text-blue-600 px-2 py-1 rounded-md hover:bg-blue-100 transition">
+                      <button className="mt-1 flex items-center gap-1 text-xs text-yellow-600 px-2 py-1 rounded-md hover:bg-yellow-100 transition">
                         View Profile
                         <ChevronRight className="w-4 h-4" />
                       </button>
@@ -232,7 +238,7 @@ function Navbar() {
               )}
 
               {/* Separator */}
-              <div className="border-t border-blue-100 my-2" />
+              <div className="border-t border-yellow-100 my-2" />
 
               {/* Auth buttons (only visible if not logged in) */}
               {!loggedIn && (
@@ -240,21 +246,21 @@ function Navbar() {
                   <NavLink
                     to="/login"
                     onClick={() => setIsOpen(false)}
-                    className="w-full text-left py-2 px-4 rounded-md text-blue-700 hover:bg-blue-50 transition"
+                    className="w-full text-left py-2 px-4 rounded-md text-yellow-700 hover:bg-yellow-50 transition"
                   >
                     LogIn
                   </NavLink>
                   <NavLink
                     to="/signin"
                     onClick={() => setIsOpen(false)}
-                    className="w-full text-left py-2 px-4 rounded-md bg-blue-600 text-white hover:bg-blue-700 transition"
+                    className="w-full text-left py-2 px-4 rounded-md bg-yellow-600 text-white hover:bg-yellow-700 transition"
                   >
                     Sign In
                   </NavLink>
                 </>
               )}
 
-              <div className="border-t border-blue-100" />
+              <div className="border-t border-yellow-100" />
               <div className="flex flex-col gap-4">
                 {[
                   { name: "Home", to: "/" },
@@ -269,8 +275,8 @@ function Navbar() {
                     className={({ isActive }) =>
                       `w-full text-left py-2 px-4 rounded-md transition ${
                         isActive
-                          ? "bg-blue-200 text-blue-700 font-semibold"
-                          : "hover:bg-blue-50 text-blue-800"
+                          ? "bg-yellow-200 text-yellow-700 font-semibold"
+                          : "hover:bg-yellow-50 text-yellow-800"
                       }`
                     }
                   >

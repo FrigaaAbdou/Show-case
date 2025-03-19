@@ -11,12 +11,10 @@ function Login() {
   });
   const [error, setError] = useState('');
 
-  // Handle input changes
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
@@ -32,12 +30,10 @@ function Login() {
       const data = await response.json();
 
       if (!response.ok) {
-        setError(data.message || 'Login failed');
+        setError(data.message || 'Échec de la connexion');
       } else {
-        // Save token and user info to localStorage
         localStorage.setItem('jwtToken', data.token);
         localStorage.setItem('user', JSON.stringify(data.user));
-        // Navigate to home page and refresh the page
         navigate('/');
         setTimeout(() => {
           window.location.reload();
@@ -45,50 +41,64 @@ function Login() {
       }
     } catch (err) {
       console.error(err);
-      setError('Server error, please try again later.');
+      setError('Erreur serveur, veuillez réessayer plus tard.');
     }
   };
 
   return (
-    <section className=" flex items-center justify-center ">
-      <div className="w-full max-w-md p-8 bg-blue-50 shadow-md rounded-2xl space-y-6 md:py-52">
-        <h1 className="text-2xl font-bold text-blue-800 text-center">Welcome Back</h1>
-        <p className="text-sm text-blue-600 text-center">Please sign in to your account</p>
-  
-        <form className="space-y-4" onSubmit={handleSubmit}>
-          <input
-            type="email"
-            name="email"
-            placeholder="Email"
-            value={formData.email}
-            onChange={handleChange}
-            className="w-full p-3 rounded-md border border-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            required
-          />
-          <input
-            type="password"
-            name="password"
-            placeholder="Password"
-            value={formData.password}
-            onChange={handleChange}
-            className="w-full p-3 rounded-md border border-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            required
-          />
-          {error && <p className="text-red-500 text-sm text-center">{error}</p>}
+    <section className="min-h-screen flex items-center justify-center ">
+      <div className="w-full max-w-md p-10 bg-white shadow-2xl rounded-3xl space-y-8">
+        <div className="text-center">
+          <h1 className="text-3xl font-bold text-blue-800">Bienvenue</h1>
+          <p className="text-md text-blue-600 mt-2">
+            Connectez-vous à votre compte
+          </p>
+        </div>
+        <form className="space-y-6" onSubmit={handleSubmit}>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Email
+            </label>
+            <input
+              type="email"
+              name="email"
+              placeholder="votre.email@example.com"
+              value={formData.email}
+              onChange={handleChange}
+              required
+              className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Mot de passe
+            </label>
+            <input
+              type="password"
+              name="password"
+              placeholder="********"
+              value={formData.password}
+              onChange={handleChange}
+              required
+              className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+          {error && <p className="text-red-500 text-center text-sm">{error}</p>}
           <button
             type="submit"
-            className="w-full py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition"
+            className="w-full py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition"
           >
-            Login
+            Connexion
           </button>
         </form>
-  
-        <p className="text-sm text-center text-blue-600">
-          Don't have an account?{" "}
-          <a href="/signin" className="text-blue-700 font-medium hover:underline">
-            Sign up
-          </a>
-        </p>
+        <div className="text-center">
+          <p className="text-sm text-blue-600">
+            Vous n'avez pas de compte ?{' '}
+            <a href="/signin" className="font-medium hover:underline">
+              Inscrivez-vous
+            </a>
+          </p>
+        </div>
       </div>
     </section>
   );
