@@ -111,7 +111,7 @@ function Profile() {
           onClick={() => navigate("/orders")}
           className="w-full py-3 bg-blue-100 text-blue-700 rounded-md hover:bg-blue-200 transition"
         >
-          See My Orders
+          Voir mes inscriptions
         </button>
       </div>
     </section>

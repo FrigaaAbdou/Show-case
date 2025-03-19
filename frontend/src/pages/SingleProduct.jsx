@@ -7,41 +7,41 @@ const API_URL = import.meta.env.VITE_API_URL;
 function SingleProduct() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [product, setProduct] = useState(null);
+  const [formation, setFormation] = useState(null);
   const [error, setError] = useState("");
   const [alertData, setAlertData] = useState(null);
-  const [quantity, setQuantity] = useState(1);
 
   useEffect(() => {
     fetch(`${API_URL}/item/${id}`)
       .then((res) => res.json())
-      .then((data) => setProduct(data))
-      .catch(() => setError("Error fetching product."));
+      .then((data) => setFormation(data))
+      .catch(() => setError("Erreur lors du chargement de la formation."));
   }, [id]);
 
-  const handleOrderNow = async () => {
+  const handleRegisterNow = async () => {
     const token = localStorage.getItem("jwtToken");
     if (!token) {
       navigate("/login");
       return;
     }
 
-    if (!product) {
+    if (!formation) {
       setAlertData({
-        message: "Product data is missing",
+        message: "Les données de la formation sont manquantes",
         onConfirm: () => setAlertData(null),
       });
       return;
     }
 
+    // Quantité fixe à 1
     const orderData = {
       products: [
         {
-          product: product?._id,
-          quantity,
+          product: formation._id,
+          quantity: 1,
         },
       ],
-      totalPrice: product?.price * quantity,
+      totalPrice: formation.price,
     };
 
     try {
@@ -57,30 +57,39 @@ function SingleProduct() {
 
       if (!response.ok) {
         setAlertData({
-          message: data.message || "Failed to place order",
+          message: data.message || "Échec de l'inscription",
           onConfirm: () => setAlertData(null),
         });
       } else {
         setAlertData({
-          message: "Order placed successfully",
+          message: "Inscription réussie",
           subMessage:
-            "Thank you for your order! We're preparing your product with care and will keep you updated on its journey.",
+            "Merci de votre inscription ! Nous vous contacterons sous peu pour la suite.",
           onConfirm: () => setAlertData(null),
         });
       }
     } catch {
       setAlertData({
-        message: "Error placing order",
+        message: "Erreur lors de l'inscription",
         onConfirm: () => setAlertData(null),
       });
     }
   };
 
-  if (error) return <div className="text-center text-red-500">{error}</div>;
-  if (!product) return <div className="text-center">Loading...</div>;
+  if (error)
+    return <div className="text-center text-red-500 py-8">{error}</div>;
+  if (!formation)
+    return <div className="text-center py-8 text-blue-700">Chargement...</div>;
+
+  // Formatage de la date en français
+  const formationDate = new Date(formation.formationDate).toLocaleDateString("fr-FR", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
 
   return (
-    <section className="min-h-screen flex items-center justify-center bg-white px-6 py-12">
+    <section className="min-h-screen bg-white flex items-center justify-center px-4 py-12">
       {alertData && (
         <AlertDialog
           message={alertData.message}
@@ -89,58 +98,64 @@ function SingleProduct() {
           onClose={() => setAlertData(null)}
         />
       )}
-      <div className="w-full max-w-4xl bg-blue-50 p-8 rounded-2xl shadow-md space-y-8">
-        <div className="w-full h-64 bg-blue-100 rounded-xl flex items-center justify-center">
-          <img
-            src={product.imgLink || product.image}
-            alt={product.name}
-            className="object-cover h-full w-full rounded-xl"
-          />
-        </div>
-        <h1 className="text-3xl font-bold text-blue-800">{product.name}</h1>
-        <p className="text-blue-600 text-sm">{product.description}</p>
-        <p className="text-2xl font-semibold text-blue-700 mt-4">
-          ${product.price}
-        </p>
-        <div className="text-blue-700 text-sm leading-relaxed space-y-2">
-          <p>{product.fullDescription || "No full description provided."}</p>
-        </div>
+      <div className="w-full max-w-5xl bg-white rounded-3xl shadow-2xl overflow-hidden transform transition-all duration-300 hover:scale-105">
+        <div className="grid md:grid-cols-2">
+          {/* Image Section */}
+          <div className="relative">
+            <img
+              src={formation.imgLink || formation.image}
+              alt={formation.name}
+              className="w-full h-full object-cover md:h-full"
+            />
+            <div className="absolute top-4 left-4 bg-blue-600 text-white px-3 py-1 rounded-full text-sm font-medium">
+              Formation
+            </div>
+          </div>
 
-        {/* Quantity Selector */}
-        <div className="flex items-center gap-4 mt-6">
-          <p className="text-blue-700 font-medium">Quantity:</p>
-          <div className="flex items-center gap-2">
+          {/* Content Section */}
+          <div className="p-8 flex flex-col justify-between">
+            <div>
+              <h1 className="text-4xl font-bold text-blue-800 mb-2">
+                {formation.name}
+              </h1>
+              {/* Badge de date avec icône de calendrier */}
+              <div className="flex items-center gap-2 mb-4">
+                <span className="inline-flex items-center bg-blue-50 text-blue-600 px-3 py-1 rounded-full text-sm font-medium">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-4 w-4 mr-1"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10m-9 4h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                  </svg>
+                  {formationDate}
+                </span>
+              </div>
+              <p className="text-blue-600 text-lg mb-6">
+                {formation.description}
+              </p>
+              {formation.price && (
+                <p className="text-3xl font-semibold text-blue-700 mb-6">
+                  ${formation.price}
+                </p>
+              )}
+              <div className="text-blue-700 text-base leading-relaxed mb-6">
+                <p>
+                  {formation.fullDescription ||
+                    "Aucune description détaillée fournie."}
+                </p>
+              </div>
+            </div>
+
             <button
-              onClick={() => setQuantity(Math.max(1, quantity - 1))}
-              className="w-8 h-8 flex items-center justify-center bg-blue-100 text-blue-700 rounded-full hover:bg-blue-200 transition"
+              onClick={handleRegisterNow}
+              className="w-full py-4 bg-blue-600 text-white font-bold rounded-lg hover:bg-blue-700 transition"
             >
-              –
-            </button>
-            <span className="w-10 text-center font-medium text-blue-800">
-              {quantity}
-            </span>
-            <button
-              onClick={() => setQuantity(quantity + 1)}
-              className="w-8 h-8 flex items-center justify-center bg-blue-100 text-blue-700 rounded-full hover:bg-blue-200 transition"
-            >
-              +
+              S'inscrire
             </button>
           </div>
-        </div>
-
-        <div className="flex flex-col sm:flex-row gap-4 mt-6">
-          <button className="w-full py-3 text-blue-700 border border-blue-700 rounded-md hover:bg-blue-50 transition">
-            Add to Cart
-          </button>
-          <button
-            onClick={handleOrderNow}
-            className="w-full py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition"
-          >
-            Order Now
-          </button>
-        </div>
-        <div className="mt-6 text-center text-xs text-blue-500">
-          🚚 Free shipping • 🔒 Secure checkout • 💬 24/7 Support
         </div>
       </div>
     </section>
