@@ -11,7 +11,7 @@ function Product() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch(`${API_URL}/item`)
+    fetch(`${API_URL}/api/item`)
       .then((res) => res.json())
       .then((data) => {
         if (data.items && Array.isArray(data.items)) {
