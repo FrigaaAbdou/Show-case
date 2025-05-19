@@ -152,7 +152,7 @@ const Home = () => {
       {/* Call to Action */}
       <section className="bg-yellow-400 py-24 text-center text-blue-900">
         <h2 className="text-4xl md:text-5xl font-bold mb-8">
-          Prêt à transformer votre avenir ?
+          Prêt à transformer votre avenir?
         </h2>
         <p className="text-2xl mb-12">
           Rejoignez une formation CESI dès aujourd'hui ou demandez un devis
