@@ -3,7 +3,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const helmet = require('helmet');
-
+const frontendUrl = process.env.FRONTEND_URL;
 const app = express();
 
 // ✅ CORS must come early
@@ -11,7 +11,8 @@ const allowedOrigins = [
   'https://cesi-app.netlify.app',
   'https://deploy-preview-2--cesi-app.netlify.app',
   'http://localhost:5173',
-];
+  process.env.FRONTEND_URL,
+].filter(Boolean);
 
 app.use(cors({
   origin: function (origin, callback) {
