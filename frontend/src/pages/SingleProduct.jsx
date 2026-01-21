@@ -138,7 +138,7 @@ function SingleProduct() {
               </p>
               {formation.price && (
                 <p className="text-3xl font-semibold text-blue-700 mb-6">
-                  ${formation.price}
+                  DA{formation.price}
                 </p>
               )}
               <div className="text-blue-700 text-base leading-relaxed mb-6">
